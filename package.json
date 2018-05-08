@@ -1,0 +1,23 @@
+{
+  "name": "es6-deps",
+  "version": "0.0.1",
+  "description": "a simple util to get es6/jsx dependencies",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "builtin-modules": "latest",
+    "resolve": "^1.1.6"
+  },
+  "keywords": [
+    "es6",
+    "jsx",
+    "deps",
+    "dependencies"
+  ],
+  "engines": {
+    "node": ">=8.x"
+  },
+  "license": "MIT"
+}
