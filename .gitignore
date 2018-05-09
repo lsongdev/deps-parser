@@ -1,2 +1,4 @@
-node_modules
-.DS_*
+
+yarn.lock
+
+node_modules/

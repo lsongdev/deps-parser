@@ -1,9 +1,11 @@
-const fs      = require('fs');
-const path    = require('path');
+const fs = require('fs');
+const path = require('path');
 const Resolve = require('resolve');
 const builtin = require('builtin-modules');
+// cache
+let cache = {};
 // token
-const rImport  = /import\s+(.+)\s+from\s+['"]([^'"]+)['"]/;
+const rImport = /import\s+(.+)\s+from\s+['"]([^'"]+)['"]/;
 const rRequire = /require\s*\(['"]([^'")]+)['"]\)/;
 /**
  * parse module dependencies
@@ -18,7 +20,11 @@ const parseDeps = (filename, {
   ignorePackages = [],
   ignorePattern = /^\s+$/,
 } = {}) => {
-  return fs.readFileSync(filename, 'utf8')
+  const stat = fs.statSync(filename);
+  if (cache[filename] && cache[filename].time === stat.mtimeMs) {
+    return cache[filename].deps;
+  }
+  const deps = fs.readFileSync(filename, 'utf8')
     .replace(/(?:[^\\])\/\*[\S\s]*?\*\//g, '') // block-comment
     .replace(/(import.*)(\{[^}]+\})(.*from)/gm, (m, $1, $2, $3) => {
       return $1 + $2.replace(/\n/g, '') + $3; // normalize
@@ -47,7 +53,7 @@ const parseDeps = (filename, {
       try {
         return resolve(dep, {
           basedir: path.dirname(filename),
-          extensions: [ '.js', '.jsx', '.es6' ]
+          extensions: ['.js', '.jsx', '.es6']
         });
       } catch (e) {
         if (ignoreNotFound) return null;
@@ -55,6 +61,11 @@ const parseDeps = (filename, {
       }
     })
     .filter(Boolean);
+  cache[filename] = {
+    deps,
+    time: stat.mtimeMs
+  };
+  return deps;
 };
 /**
  * find module dependencies
@@ -66,7 +77,7 @@ const findDeps = (name, options) => {
   let f; // file name
   const c = {}; // cache
   const d = []; // deps
-  const q = [ name ]; // pending queue
+  const q = [name]; // pending queue
   while (f = q.pop()) { // eslint-disable-line
     if (!c[f]) {
       let r = parseDeps(f, options);
@@ -89,8 +100,8 @@ function ES6Deps(options) {
   return Object.assign(this, options);
 }
 
-ES6Deps.prototype.clearCache =  () => {
-  // do nothing
+ES6Deps.prototype.clearCache = () => {
+  cache = {};
 };
 
 ES6Deps.prototype.getDeps = function getDeps(filename) {

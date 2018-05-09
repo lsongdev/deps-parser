@@ -1,7 +1,7 @@
 {
-  "name": "es6-deps",
-  "version": "0.0.1",
-  "description": "a simple util to get es6/jsx dependencies",
+  "name": "deps-parser",
+  "version": "0.0.2",
+  "description": "A simple way to get module dependencies",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -19,5 +19,17 @@
   "engines": {
     "node": ">=8.x"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song940/deps-parser.git"
+  },
+  "author": "lsong",
+  "bugs": {
+    "url": "https://github.com/song940/deps-parser/issues"
+  },
+  "homepage": "https://github.com/song940/deps-parser#readme"
 }

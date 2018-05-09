@@ -1,33 +1,31 @@
-es6-deps
--------
+# deps-parser
 
-A simple util to get dependency list of a es6/jsx file.
+A simple way to get module dependencies
 
-Install
------
+## Install
 
+
+```bash
+~$ npm install deps-parser
 ```
-npm install es6-deps
-```
 
-Example
------
+## Example
 
 Suppose you have 2 files, one is `a.js` with content:
 
-```
+```js
 var b = require('./b')
 ```
 another is `b.js` whose content is:
 
-```
+```js
 var c = require('./c');
 ```
 
 Below is how we get the dependencies list of `a.js`:
 
-```
-var Deps = require('es6-deps');
+```js
+var Deps = require('deps-parser');
 var analyzer = new Deps();
 var deps = analyzer.getDeps(__dirname + "/a.js");
 console.log(deps); 
@@ -38,9 +36,6 @@ console.log(deps);
 ]
 ```
 
-please refer to `test/index.spec.js` for more advance usage.
+## License
 
-License
------
-
-MIT
+This project is under MIT licence.
